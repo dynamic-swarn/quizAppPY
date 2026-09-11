@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>QuizMaster · Modern Quiz Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ==================== TOAST CONTAINER ==================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==================== MODAL CONTAINER ==================== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content" id="modalContent">
+    <!-- dynamic content -->
+  </div>
+</div>
+
+<!-- ==================== MAIN APP WRAPPER ==================== -->
+<div class="app-wrapper">
+
+  <!-- ============================================================ -->
+  <!-- PAGE: AUTH / ROLE SELECTION                                   -->
+  <!-- ============================================================ -->
+  <div id="pageAuth" class="page active">
+    <div style="text-align:center; padding: 30px 0 10px;">
+      <h1 style="font-size:2.4rem; font-weight:800; color:var(--text); letter-spacing:-0.02em;">QuizMaster</h1>
+      <p style="color:var(--text-muted); font-size:1.1rem; margin-top:4px;">How do you want to continue?</p>
+    </div>
+
+    <div class="role-grid">
+      <!-- Student card -->
+      <div class="role-card" id="roleStudentCard" tabindex="0" role="button" aria-label="Continue as Student">
+        <span class="role-icon">👨‍🎓</span>
+        <h3>Student</h3>
+        <p>Take quizzes, track your scores and improve your knowledge.</p>
+        <button class="btn btn-block" style="margin-top:8px;">Continue as Student</button>
+      </div>
+      <!-- Admin card -->
+      <div class="role-card" id="roleAdminCard" tabindex="0" role="button" aria-label="Continue as Admin">
+        <span class="role-icon">🛡️</span>
+        <h3>Admin</h3>
+        <p>Create and manage quizzes and questions.</p>
+        <button class="btn btn-block" style="margin-top:8px;">Continue as Admin</button>
+      </div>
+    </div>
+
+    <div class="text-center" style="color:var(--text-muted); font-size:0.85rem; padding-bottom:20px;">
+      <!-- <span>🔒 Demo credentials: student / student123 · admin / admin123 · Secret: CHANGE_THIS_SECRET</span> -->
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: STUDENT LOGIN                                           -->
+  <!-- ============================================================ -->
+  <div id="pageStudentLogin" class="page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="auth-icon">🎓</div>
+        <h2>Student Login</h2>
+        <p>Welcome back! Please enter your details.</p>
+      </div>
+      <form id="studentLoginForm" class="card card-flat" novalidate>
+        <div class="form-group">
+          <label for="loginEmail">Email / Username</label>
+          <input type="text" id="loginEmail" placeholder="student or student@example.com" value="student" autocomplete="username">
+          <div class="error-text" id="loginEmailError">Please enter your email or username.</div>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" value="student123" autocomplete="current-password">
+          <button type="button" class="input-icon" id="toggleLoginPassword" aria-label="Show password">👁️</button>
+          <div class="error-text" id="loginPasswordError">Password is required.</div>
+        </div>
+        <button type="submit" class="btn btn-block mt-2">Login</button>
+        <div class="auth-footer">
+          <a id="goToSignup">Create an Account</a> · <a id="forgotPasswordLink">Forgot Password</a>
+          <br><a id="backToRoleFromLogin" style="margin-top:8px; display:inline-block;">← Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: STUDENT SIGNUP                                          -->
+  <!-- ============================================================ -->
+  <div id="pageStudentSignup" class="page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="auth-icon">📝</div>
+        <h2>Create Account</h2>
+        <p>Join QuizMaster and start learning today.</p>
+      </div>
+      <form id="studentSignupForm" class="card card-flat" novalidate>
+        <div class="form-group">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" placeholder="John Doe" autocomplete="name">
+          <div class="error-text" id="signupNameError">Full name is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="signupUsername">Username</label>
+          <input type="text" id="signupUsername" placeholder="johndoe" autocomplete="username">
+          <div class="error-text" id="signupUsernameError">Username is required (min 3 characters).</div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label for="signupBranch">Branch</label>
+            <input type="text" id="signupBranch" placeholder="CSE / ECE / ME" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label for="signupRollNumber">Roll Number / ID</label>
+            <input type="text" id="signupRollNumber" placeholder="2024-CS-101" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" placeholder="john@example.com" autocomplete="email">
+          <div class="error-text" id="signupEmailError">Please enter a valid email.</div>
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" placeholder="••••••••" autocomplete="new-password">
+          <button type="button" class="input-icon" id="toggleSignupPassword" aria-label="Show password">👁️</button>
+          <div class="error-text" id="signupPasswordError">Password must be at least 6 characters.</div>
+        </div>
+        <div class="form-group">
+          <label for="signupConfirm">Confirm Password</label>
+          <input type="password" id="signupConfirm" placeholder="••••••••" autocomplete="new-password">
+          <div class="error-text" id="signupConfirmError">Passwords do not match.</div>
+        </div>
+        <button type="submit" class="btn btn-block mt-2">Sign Up</button>
+        <div class="auth-footer">
+          Already have an account? <a id="goToLogin">Login</a>
+          <br><a id="backToRoleFromSignup" style="margin-top:8px; display:inline-block;">← Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: ADMIN LOGIN                                             -->
+  <!-- ============================================================ -->
+  <div id="pageAdminLogin" class="page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <div class="auth-icon">🛡️</div>
+        <h2>Admin Access</h2>
+        <p>Enter your credentials and the secret password.</p>
+      </div>
+      <form id="adminLoginForm" class="card card-flat" novalidate>
+        <div class="form-group">
+          <label for="adminUsername">Admin Username</label>
+          <input type="text" id="adminUsername" placeholder="admin" autocomplete="username">
+          <div class="error-text" id="adminUsernameError">Username is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Admin Password</label>
+          <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="input-icon" id="toggleAdminPassword" aria-label="Show password">👁️</button>
+          <div class="error-text" id="adminPasswordError">Password is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="adminSecret">Secret Admin Password</label>
+          <input type="password" id="adminSecret" placeholder="Enter secret" autocomplete="off">
+          <button type="button" class="input-icon" id="toggleAdminSecret" aria-label="Show secret">👁️</button>
+          <div class="error-text" id="adminSecretError">Secret password is required.</div>
+        </div>
+        <button type="submit" class="btn btn-block mt-2">Login as Admin</button>
+        <div class="auth-footer">
+          <a id="backToRoleFromAdmin">← Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: STUDENT DASHBOARD                                       -->
+  <!-- ============================================================ -->
+  <div id="pageStudentDashboard" class="page">
+    <div class="dashboard-header">
+      <div>
+        <h1>Welcome, <span id="studentNameDisplay">Student</span>! 👋</h1>
+        <p class="subtitle">Ready for your next challenge?</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" id="navToHistory">📊 History</button>
+        <button class="btn btn-outline btn-sm" id="navToAccount">👤 Account</button>
+        <button class="btn btn-ghost btn-sm" id="studentLogoutBtn">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="studentStatsGrid">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotalQuizzes">0</div>
+        <div class="stat-label">Total Quizzes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statAvgScore">0%</div>
+        <div class="stat-label">Average Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statBestScore">0%</div>
+        <div class="stat-label">Best Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statQuestionsAnswered">0</div>
+        <div class="stat-label">Questions Answered</div>
+      </div>
+    </div>
+
+    <!-- Available Quizzes -->
+    <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:8px;">📚 Available Quizzes</h2>
+    <div class="quiz-grid" id="studentQuizGrid">
+      <!-- dynamic quiz cards -->
+    </div>
+
+    <!-- Recent History Preview -->
+    <div style="margin-top:40px;">
+      <div class="flex-between">
+        <h2 style="font-size:1.4rem; font-weight:700;">🕐 Recent Attempts</h2>
+        <button class="btn btn-outline btn-sm" id="viewAllHistoryBtn">View All</button>
+      </div>
+      <div id="recentHistoryList" style="margin-top:12px;">
+        <!-- dynamic history -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: QUIZ INTERFACE                                          -->
+  <!-- ============================================================ -->
+  <div id="pageQuiz" class="page">
+    <div style="max-width:800px; margin:0 auto; padding:20px 0;">
+      <div class="flex-between mb-2">
+        <h2 id="quizTitleDisplay" style="font-size:1.4rem; font-weight:700;">Quiz Title</h2>
+        <button class="btn btn-ghost btn-sm" id="quitQuizBtn">✕ Quit</button>
+      </div>
+
+      <div class="quiz-progress">
+        <span id="questionCounter" style="font-weight:600; color:var(--text-muted); font-size:0.9rem;">Question 1 / 5</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="quizProgressFill"></div>
+        </div>
+        <div class="timer" id="quizTimer">⏱ 10:00</div>
+      </div>
+
+      <div class="question-card" id="questionCard">
+        <h3 id="questionText">Loading question...</h3>
+        <div class="options-list" id="optionsList">
+          <!-- dynamic options -->
+        </div>
+        <div id="quizAnswerFeedback" class="answer-feedback" aria-live="polite"></div>
+      </div>
+
+      <div class="quiz-nav">
+        <button class="btn btn-ghost" id="prevQuestionBtn" disabled>← Previous</button>
+        <button class="btn" id="nextQuestionBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: QUIZ RESULT                                             -->
+  <!-- ============================================================ -->
+  <div id="pageResult" class="page">
+    <div class="result-container">
+      <h1 style="font-size:2rem; font-weight:700; margin-bottom:8px;">Quiz Completed! 🎉</h1>
+      <p style="color:var(--text-muted); margin-bottom:24px;">Here's how you performed</p>
+
+      <div class="circular-progress" id="resultCircular">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle class="bg-circle" cx="70" cy="70" r="60"></circle>
+          <circle class="fg-circle" id="resultCircle" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+        </svg>
+        <div class="percent-text" id="resultPercentText">0%</div>
+      </div>
+
+      <div class="result-score" id="resultScore">0/0</div>
+      <div class="result-percent" id="resultPercentLabel">0%</div>
+      <div class="result-message" id="resultMessage">Keep practicing!</div>
+
+      <div class="result-details">
+        <div class="result-detail-item">
+          <div class="value" id="resultCorrect">0</div>
+          <div class="label">Correct</div>
+        </div>
+        <div class="result-detail-item">
+          <div class="value" id="resultWrong">0</div>
+          <div class="label">Wrong</div>
+        </div>
+        <div class="result-detail-item">
+          <div class="value" id="resultUnanswered">0</div>
+          <div class="label">Unanswered</div>
+        </div>
+        <div class="result-detail-item">
+          <div class="value" id="resultTimeTaken">00:00</div>
+          <div class="label">Time Taken</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-outline" id="reviewAnswersBtn">📖 Review Answers</button>
+        <button class="btn btn-outline" id="tryAnotherQuizBtn">🔄 Try Another Quiz</button>
+        <button class="btn" id="goToDashboardBtn">🏠 Go to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: ANSWER REVIEW                                           -->
+  <!-- ============================================================ -->
+  <div id="pageReview" class="page">
+    <div style="max-width:800px; margin:0 auto; padding:20px 0;">
+      <div class="flex-between mb-3">
+        <h1 style="font-size:1.8rem; font-weight:700;">📖 Answer Review</h1>
+        <button class="btn btn-ghost btn-sm" id="backToResultBtn">← Back to Result</button>
+      </div>
+      <div id="reviewList" class="review-list">
+        <!-- dynamic review items -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: STUDENT HISTORY                                         -->
+  <!-- ============================================================ -->
+  <div id="pageHistory" class="page">
+    <div style="max-width:1000px; margin:0 auto; padding:20px 0;">
+      <div class="flex-between mb-3">
+        <h1 style="font-size:1.8rem; font-weight:700;">📈 Quiz History</h1>
+        <button class="btn btn-ghost btn-sm" id="backToDashboardFromHistory">← Dashboard</button>
+      </div>
+      <div id="historyTableWrapper">
+        <!-- dynamic table -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: STUDENT ACCOUNT                                         -->
+  <!-- ============================================================ -->
+  <div id="pageAccount" class="page">
+    <div style="max-width:600px; margin:0 auto; padding:20px 0;">
+      <div class="flex-between mb-3">
+        <h1 style="font-size:1.8rem; font-weight:700;">👤 My Account</h1>
+        <button class="btn btn-ghost btn-sm" id="backToDashboardFromAccount">← Dashboard</button>
+      </div>
+      <div class="card">
+        <div style="text-align:center; margin-bottom:24px;">
+          <div style="width:80px; height:80px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:2.5rem; color:var(--primary);">👤</div>
+          <h2 id="accountFullName" style="font-size:1.4rem; font-weight:700;">John Doe</h2>
+          <p style="color:var(--text-muted);" id="accountUsername">@johndoe</p>
+        </div>
+        <div class="form-group">
+          <label for="accountNameInput">Full Name</label>
+          <input type="text" id="accountNameInput" value="John Doe">
+        </div>
+        <div class="form-group">
+          <label for="accountUsernameInput">Username</label>
+          <input type="text" id="accountUsernameInput" value="johndoe">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label for="accountBranchInput">Branch</label>
+            <input type="text" id="accountBranchInput" value="CSE">
+          </div>
+          <div class="form-group">
+            <label for="accountRollNumberInput">Roll Number / ID</label>
+            <input type="text" id="accountRollNumberInput" value="2024-CS-101">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="accountEmailInput">Email</label>
+          <input type="email" id="accountEmailInput" value="john@example.com" disabled>
+        </div>
+        <div class="form-group">
+          <label>Member Since</label>
+          <input type="text" id="accountCreatedAt" value="2025-01-15" disabled>
+        </div>
+        <button class="btn btn-block" id="saveAccountBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAGE: ADMIN DASHBOARD                                         -->
+  <!-- ============================================================ -->
+  <div id="pageAdminDashboard" class="page">
+    <div class="dashboard-header">
+      <div>
+        <h1>🛡️ Admin Dashboard</h1>
+        <p class="subtitle">Manage quizzes, questions, and students.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" id="adminNavCreate">➕ Create Quiz</button>
+        <button class="btn btn-outline btn-sm" id="adminNavManage">📚 Manage Quizzes</button>
+        <button class="btn btn-outline btn-sm" id="adminNavStudents">👥 Students</button>
+        <button class="btn btn-ghost btn-sm" id="adminLogoutBtn">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:16px;">
+        <div>
+          <h2 style="margin:0; font-size:1.4rem;">👤 Admin Profile</h2>
+          <p id="adminProfileHeader" style="margin:6px 0 0; color:var(--text-muted);">Admin details</p>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+        <div class="form-group">
+          <label for="adminNameInput">Full Name</label>
+          <input type="text" id="adminNameInput" placeholder="Admin name">
+        </div>
+        <div class="form-group">
+          <label for="adminUsernameInput">Username</label>
+          <input type="text" id="adminUsernameInput" placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label for="adminEmailInput">Email</label>
+          <input type="email" id="adminEmailInput" placeholder="admin@example.com" disabled>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; margin-top:16px;">
+        <div style="color:var(--text-muted); font-size:0.9rem;">Member since <span id="adminCreatedAt">N/A</span></div>
+        <button class="btn" id="adminSaveProfileBtn">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- Admin stats -->
+    <div class="stats-grid" id="adminStatsGrid">
+      <div class="stat-card">
+        <div class="stat-value" id="adminStatQuizzes">0</div>
+        <div class="stat-label">Total Quizzes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="adminStatQuestions">0</div>
+        <div class="stat-label">Total Questions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="adminStatStudents">0</div>
+        <div class="stat-label">Total Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="adminStatAttempts">0</div>
+        <div class="stat-label">Quiz Attempts</div>
+      </div>
+    </div>
+
+    <!-- Create Quiz Form -->
+    <div id="adminCreateSection" style="margin-top:32px;">
+      <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:16px;">➕ Create New Quiz</h2>
+      <div class="card">
+        <form id="createQuizForm">
+          <div class="form-group">
+            <label for="quizTitleInput">Quiz Title</label>
+            <input type="text" id="quizTitleInput" placeholder="e.g. JavaScript Fundamentals" required>
+          </div>
+          <div class="form-group">
+            <label for="quizDescriptionInput">Description</label>
+            <textarea id="quizDescriptionInput" rows="2" placeholder="Test your JavaScript knowledge" required></textarea>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label for="quizCategoryInput">Category</label>
+              <input type="text" id="quizCategoryInput" placeholder="JavaScript" required>
+            </div>
+            <div class="form-group">
+              <label for="quizDifficultyInput">Difficulty</label>
+              <select id="quizDifficultyInput">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div class="form-group">
+              <label for="quizTimeLimitInput">Time Limit (min)</label>
+              <input type="number" id="quizTimeLimitInput" value="10" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="quizPassingInput">Passing %</label>
+              <input type="number" id="quizPassingInput" value="60" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+              <label for="quizQuestionCountInput">How many questions?</label>
+              <input type="number" id="quizQuestionCountInput" value="5" min="1" required>
+            </div>
+          </div>
+
+          <div id="quizQuestionBuilder" style="margin-top:20px;"></div>
+
+          <button type="submit" class="btn btn-block mt-2">Create Quiz</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Manage Quizzes -->
+    <div id="adminManageSection" style="margin-top:40px;">
+      <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:16px;">📚 Manage Quizzes</h2>
+      <div id="adminQuizList" class="quiz-grid">
+        <!-- dynamic admin quiz cards -->
+      </div>
+    </div>
+
+    <!-- Student Management -->
+    <div id="adminStudentsSection" style="margin-top:40px;">
+      <h2 style="font-size:1.4rem; font-weight:700; margin-bottom:16px;">👥 Registered Students</h2>
+      <div id="adminStudentList" class="table-wrapper">
+        <!-- dynamic student table -->
+      </div>
+    </div>
+  </div>
+
+</div><!-- app-wrapper -->
+
+<script src="script.js"></script>
+</body>
+</html>
